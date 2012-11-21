@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">wifi-login</string>
+    <string name="login_string">Login</string>
+    <array name="wifi_points">
+        <item>NGuest</item>
+        <item>attwifi</item>
+    </array>
+</resources>

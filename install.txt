@@ -1,0 +1,1 @@
+http://stackoverflow.com/questions/10761696/android-running-the-new-intel-emulator
