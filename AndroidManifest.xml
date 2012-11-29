@@ -13,6 +13,23 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".SyncAdapter.LoginActivity" android:excludeFromRecents="true" android:exported="true" />
+
+        <service android:name=".SyncAdapter.AccountAuthenticatorService" android:exported="true">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator"></action>
+            </intent-filter>
+            <meta-data android:name="android.accounts.AccountAuthenticator" android:resource="@xml/my_authenticator" />
+        </service>
+
+        <service android:name=".SyncAdapter.SyncService" android:exported="true">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+            <meta-data android:resource="@xml/my_syncadapter" android:name="android.content.SyncAdapter" />
+        </service>
+
     </application>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 </manifest>
