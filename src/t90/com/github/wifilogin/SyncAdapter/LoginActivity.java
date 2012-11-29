@@ -2,6 +2,7 @@ package t90.com.github.wifilogin.SyncAdapter;
 
 import android.accounts.AccountAuthenticatorActivity;
 import android.os.Bundle;
+import t90.com.github.wifilogin.R;
 
 /**
  * User: VasiltsV
@@ -13,6 +14,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 
     public LoginActivity() {
         super();
+        setContentView(R.layout.login);
     }
 
     @Override
