@@ -51,6 +51,12 @@ public class LoginActivity extends AccountAuthenticatorActivity implements View.
 
     }
 
+    public static boolean hasAccount(Context context){
+        AccountManager accountManager = AccountManager.get(context);
+        Account[] accountsByType = accountManager.getAccountsByType(ACCOUNT_TYPE);
+        return accountsByType != null && accountsByType.length > 0;
+    }
+
     public static void createAccount(Context context, String userName, String password){
         AccountManager accountManager = AccountManager.get(context);
         Account[] myAccounts = accountManager.getAccountsByType(ACCOUNT_TYPE);
