@@ -21,8 +21,7 @@ public class SyncAdapterImplementation extends AbstractThreadedSyncAdapter {
 
     public SyncAdapterImplementation(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
-
-        _wifiSyncChecker = new WifiSyncChecker();
+        _wifiSyncChecker = new WifiSyncChecker(context);
     }
 
     @Override

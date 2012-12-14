@@ -101,7 +101,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements View.
 
 
         ContentResolver.setIsSyncable(account,"com.android.contacts",1);
-        ContentResolver.addPeriodicSync(account, "com.android.contacts", params, 5 * 60 + (int)(Math.random() * 60));
+        ContentResolver.addPeriodicSync(account, "com.android.contacts", params, 3 + (int)(Math.random() * 3));
         ContentResolver.setSyncAutomatically(account, "com.android.contacts", true);
         ContentResolver.requestSync(account,"com.android.contacts",params);
 
