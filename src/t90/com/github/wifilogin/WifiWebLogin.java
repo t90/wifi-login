@@ -2,21 +2,17 @@ package t90.com.github.wifilogin;
 
 import android.app.Dialog;
 import android.app.ListActivity;
-import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Pair;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.*;
 import t90.com.github.wifilogin.SyncAdapter.ContentProviderImplementation;
 import t90.com.github.wifilogin.data.WifiWebPropertiesAdapter;
-import tinyq.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,20 +31,37 @@ public class WifiWebLogin extends ListActivity implements IPropertiesEventHandle
     private LinearLayout _propertiesLayout;
     private WifiWebPropertiesAdapter _wifiWebPropertiesAdapter;
     private ArrayList<Pair<String, String>> _properties;
+    private int _methodIdx = -1;
 
-    private int getWifiPointId(final String name){
-        Cursor cursor = getContentResolver().query(ContentProviderImplementation.WIFI_POINT_URI, new String[]{"_id"}, "SSID=?", new String[]{name}, null);
-        if(!cursor.moveToFirst()){
-            return -1;
-        }
-        return cursor.getInt(0);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String strSSID = (String) getIntent().getExtras().get(SSID);
-        int wifiPointId = getWifiPointId(strSSID);
+
+        Cursor cursor = getContentResolver().query(ContentProviderImplementation.WIFI_POINT_URI, new String[]{"_id","METHOD","URL"}, "SSID=?", new String[]{strSSID}, null);
+        if(!cursor.moveToFirst()){
+            return;
+        }
+
+
+        int wifiPointId = cursor.getInt(0);
+        String method = cursor.getString(1);
+        String url = cursor.getString(2);
+
+        if(method != null){
+            String[] methodsArray = getResources().getStringArray(R.array.http_methods);
+
+            for(int i = 0; i < methodsArray.length; i++){
+                if(method.equals(methodsArray[i])){
+                    _methodIdx = i;
+                    break;
+                }
+            }
+
+        }
+
+
         Cursor query = getContentResolver().query(ContentProviderImplementation.PROPERTIES_URI, new String[]{"Name", "Value"}, "SSID=?", new String[]{Integer.toString(wifiPointId)}, null);
         _properties = new ArrayList<Pair<String, String>>();
         while(query.moveToNext()){
@@ -61,6 +74,9 @@ public class WifiWebLogin extends ListActivity implements IPropertiesEventHandle
     public void updateAdapter(){
         _wifiWebPropertiesAdapter = new WifiWebPropertiesAdapter(_properties,this);
         _wifiWebPropertiesAdapter.setEventHandler(this);
+        if(_methodIdx >= 0){
+            _wifiWebPropertiesAdapter.setHttpMethodIdx(_methodIdx);
+        }
         setListAdapter(_wifiWebPropertiesAdapter);
     }
 

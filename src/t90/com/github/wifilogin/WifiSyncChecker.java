@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.app.AlertDialog;
 import android.content.*;
 import android.database.Cursor;
+import android.graphics.Path;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
@@ -42,9 +43,6 @@ public class WifiSyncChecker extends BroadcastReceiver {
 
     private static final String TAG = "wifilogin.WifiSyncChecker";
 
-    private boolean _useCache = false;
-
-
     private static final String DEFAULT_WALLED_GARDEN_URL = "http://clients3.google.com/generate_204";
     private static final int WALLED_GARDEN_SOCKET_TIMEOUT_MS = 10000;
 
@@ -79,8 +77,30 @@ public class WifiSyncChecker extends BroadcastReceiver {
     }
 
 
+    private static final String CACHE_FLAG = "use_cache.flg";
+
+    private boolean useCache(){
+        File cacheDir = _context.getCacheDir();
+        return (new File(String.format("%s/%s", cacheDir.getPath(), CACHE_FLAG))).exists();
+    }
+
+    private void setUseCache(boolean v){
+        File cacheDir = _context.getCacheDir();
+        File cacheFile = new File(String.format("%s/%s", cacheDir.getPath(), CACHE_FLAG));
+        if(v && !cacheFile.exists()){
+            try {
+                cacheFile.createNewFile();
+            } catch (IOException e) {
+                Log.e(TAG,Util.exceptionToString(e));
+            }
+        }
+        else if(!v && cacheFile.exists()){
+            cacheFile.delete();
+        }
+    }
+
     public void onSync(Account account, String authority, ContentProviderClient provider, SyncResult syncResult, Context context) {
-        if(_useCache){
+        if(useCache()){
             return;
         }
 
@@ -120,7 +140,7 @@ public class WifiSyncChecker extends BroadcastReceiver {
 
                 }
 
-                _useCache = true;
+                setUseCache(true);
 
             }
             catch(ClientProtocolException cpe){
@@ -139,7 +159,7 @@ public class WifiSyncChecker extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();
         if(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION.equals(action)){
-            _useCache = false;
+            setUseCache(false);
         }
     }
 }

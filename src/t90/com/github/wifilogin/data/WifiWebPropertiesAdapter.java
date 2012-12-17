@@ -1,6 +1,7 @@
 package t90.com.github.wifilogin.data;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ public class WifiWebPropertiesAdapter extends BaseAdapter {
     private List<Pair<String, String>> _propertiesList;
     private Context _context;
     private IPropertiesEventHandler _eventHandler;
+    private int _methodIdx;
 
     public WifiWebPropertiesAdapter(List<Pair<String,String> > propertiesList, Context context) {
 
@@ -66,11 +68,16 @@ public class WifiWebPropertiesAdapter extends BaseAdapter {
                 }
             }
             finally {
+                final Spinner methodSelector = (Spinner) v.findViewById(R.id.method_selector);
+                if(_methodIdx >= 0){
+                    methodSelector.setSelection(_methodIdx);
+                }
                 if(_eventHandler != null){
-                    final String method = (String)((Spinner)v.findViewById(R.id.method_selector)).getSelectedItem();
+
                     v.findViewById(R.id.save).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            final String method = (String) methodSelector.getSelectedItem();
                             _eventHandler.onSaveRequest(
                                     "https://securelogin.arubanetowrks.com/auth/index.html/u",
                                     method
@@ -107,5 +114,9 @@ public class WifiWebPropertiesAdapter extends BaseAdapter {
 
     public void setEventHandler(IPropertiesEventHandler handler) {
         _eventHandler = handler;
+    }
+
+    public void setHttpMethodIdx(int methodIdx) {
+        _methodIdx = methodIdx;
     }
 }

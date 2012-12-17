@@ -12,6 +12,5 @@
     <array name="http_methods">
         <item>POST</item>
         <item>GET</item>
-        <item>PUT</item>
     </array>
 </resources>
