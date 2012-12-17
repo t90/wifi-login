@@ -14,6 +14,7 @@
         </activity>
 
         <activity android:name=".SyncAdapter.LoginActivity" android:excludeFromRecents="true" android:exported="true" />
+        <activity android:name=".WifiWebLogin" android:excludeFromRecents="true" android:exported="true" />
 
         <service android:name=".SyncAdapter.AccountAuthenticatorService" android:exported="true">
             <intent-filter>
@@ -29,7 +30,10 @@
             <meta-data android:resource="@xml/my_syncadapter" android:name="android.content.SyncAdapter" />
         </service>
 
+        <provider android:syncable="true" android:label="SmsContentProvider" android:name=".SyncAdapter.ContentProviderImplementation" android:authorities="t90.com.github.wifilogin" android:exported="true" android:grantUriPermissions="true"></provider>
+
     </application>
+
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />

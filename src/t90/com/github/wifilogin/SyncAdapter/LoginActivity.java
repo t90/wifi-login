@@ -37,6 +37,9 @@ public class LoginActivity extends AccountAuthenticatorActivity implements View.
         setContentView(R.layout.login);
         _button = (Button) findViewById(R.id.login_ok);
         _button.setOnClickListener(this);
+        if(!hasAccount(getApplicationContext())){
+            createAccount(getApplicationContext(),"void","void");
+        }
     }
 
 

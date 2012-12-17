@@ -1,12 +1,16 @@
 package t90.com.github.wifilogin;
 
 import android.accounts.Account;
+import android.app.AlertDialog;
 import android.content.*;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.util.Log;
+import org.apache.http.client.ClientProtocolException;
+import t90.com.github.wifilogin.SyncAdapter.ContentProviderImplementation;
 import t90.com.github.wifilogin.util.HttpUtil;
 import t90.com.github.wifilogin.util.Util;
 import tinyq.Query;
@@ -16,6 +20,7 @@ import java.lang.reflect.Array;
 import java.net.*;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 
 /**
  * User: VasiltsV
@@ -83,25 +88,45 @@ public class WifiSyncChecker extends BroadcastReceiver {
         if(wifiManager != null && wifiManager.getConnectionInfo() != null){
             try{
                 if(isWalledGardenConnection()){
-                    if("NGuest".equals(wifiManager.getConnectionInfo().getSSID())){
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream("/storage/sdcard0/p.txt")));
-                        String wifiUserName = reader.readLine();
-                        String wifiPassword = reader.readLine();
-                        HttpUtil httpUtil = new HttpUtil("https://securelogin.arubanetowrks.com/auth/index.html/u", null, null);
-                        httpUtil.get("https://securelogin.arubanetowrks.com/auth/index.html/u", new Query<String>(new String[]{"user=" + wifiUserName, "password=" + wifiPassword, "Login=I+ACCEPT"}));
 
-
+                    String activeSSID = wifiManager.getConnectionInfo().getSSID();
+                    Cursor cursor = _context.getContentResolver().query(ContentProviderImplementation.WIFI_POINT_URI, new String[]{"_id","URL","METHOD"}, "SSID=?", new String[]{activeSSID}, null);
+                    if(!cursor.moveToFirst()){
+                        throw new ClientProtocolException("Credentials not found");
                     }
+
+                    int wifiId = cursor.getInt(0);
+                    String url = cursor.getString(1);
+                    String method = cursor.getString(2);
+                    cursor = _context.getContentResolver().query(ContentProviderImplementation.PROPERTIES_URI, new String[]{"Name", "Value"}, "SSID=?", new String[]{Integer.toString(wifiId)}, null);
+
+                    String[] parameters = new String[cursor.getCount()];
+
+                    int i = 0;
+
+                    while(cursor.moveToNext()){
+                        parameters[i] = String.format("%s=%s", cursor.getString(0), URLEncoder.encode(cursor.getString(1),"UTF-8"));
+                        i++;
+                    }
+
+                    HttpUtil httpUtil = new HttpUtil(url, null, null);
+                    if(method.equals("GET")){
+                        httpUtil.get(url, new Query<String>(parameters));
+                    }
+                    else if(method.equals("POST")){
+                        httpUtil.post(url, new Query<String>(parameters), null);
+                    }
+
 
                 }
 
-//              Show login screen
-//                if(isWalledGardenConnection()){
-//                    new Intent()
-//                }
-
                 _useCache = true;
 
+            }
+            catch(ClientProtocolException cpe){
+                Intent intent = new Intent(_context, WifiWebLogin.class);
+                intent.putExtra(WifiWebLogin.SSID,wifiManager.getConnectionInfo().getSSID());
+                _context.startActivity(intent);
             }
             catch (Exception e){
                 Log.e(TAG, Util.exceptionToString(e));
