@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.provider.Settings;
 import android.text.Editable;
@@ -14,7 +15,9 @@ import android.text.Spanned;
 import android.widget.EditText;
 import android.widget.TextView;
 import org.json.JSONException;
+import t90.com.github.wifilogin.SyncAdapter.ContentProviderImplementation;
 import tinyq.BufferedReaderIterator;
+import tinyq.CursorIterator;
 import tinyq.Query;
 
 import java.io.BufferedReader;
@@ -274,7 +277,26 @@ public class Util {
 
     }
 
-	public static class ArrayCollection<T> implements Collection<T>{
+    public static final List<String> savedWifiNetworkNames(Context c){
+        Cursor cursor = c.getContentResolver().query(ContentProviderImplementation.WIFI_POINT_URI, new String[]{"SSID"}, null, null, null);
+        CursorIterator<String> iterator = new CursorIterator<String>(new Query.F<Cursor, String>() {
+            @Override
+            public String run(Cursor in) {
+                return in.getString(0);
+            }
+        }, cursor);
+        return (new Query<String>(iterator)).toList();
+    }
+
+    public static final void createNewNetwork(Context c, String ssid){
+        ContentValues values = new ContentValues();
+        values.put("SSID",ssid);
+        c.getContentResolver().insert(ContentProviderImplementation.WIFI_POINT_URI,values);
+    }
+
+
+
+    public static class ArrayCollection<T> implements Collection<T>{
 		private class ArrayIterator<T> implements Iterator<T>{
 			
 			private final ArrayCollection<T> _collection;

@@ -4,10 +4,11 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
         >
-    <TextView
+    <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Login to wifi"
+            android:id="@+id/new_network"
+            android:text="@string/new_network"
             />
     <ListView android:id="@+id/wifi_selector"
               android:layout_height="wrap_content"

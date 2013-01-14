@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">wifi-login</string>
-    <string name="login_string">Login</string>
-    <string name="user_name">User Name:</string>
-    <string name="password">Password:</string>
-    <string name="ok">Ok</string>
+    <string name="login_string">login</string>
+    <string name="user_name">user name:</string>
+    <string name="password">password:</string>
+    <string name="ok">ok</string>
+    <string name="new_network">new network</string>
     <array name="wifi_points">
         <item>NGuest</item>
         <item>attwifi</item>

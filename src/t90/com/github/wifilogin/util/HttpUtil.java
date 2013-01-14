@@ -163,6 +163,8 @@ public final class HttpUtil {
         return responseEntity.getContent();
     }
 
+
+
 //    public final int upload(String uri, Query<String> parameters, File file) throws IOException, HttpUtilNullEntityException, HttpUtilException {
 //        HttpPost httpPost = new HttpPost(getUri(uri, parameters));
 //        FileBody fileBody = new FileBody(file);
