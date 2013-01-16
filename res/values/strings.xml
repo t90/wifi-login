@@ -6,6 +6,7 @@
     <string name="password">password:</string>
     <string name="ok">ok</string>
     <string name="new_network">new network</string>
+    <string name="cancel">cancel</string>
     <array name="wifi_points">
         <item>NGuest</item>
         <item>attwifi</item>

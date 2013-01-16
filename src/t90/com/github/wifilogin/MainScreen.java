@@ -2,6 +2,7 @@ package t90.com.github.wifilogin;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -10,10 +11,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
+import android.widget.*;
 import t90.com.github.wifilogin.util.Util;
 
 import java.io.*;
@@ -30,9 +28,7 @@ public class MainScreen extends Activity implements AdapterView.OnItemClickListe
         setContentView(R.layout.main);
         _wifiSelector = (ListView) findViewById(R.id.wifi_selector);
         ((Button)findViewById(R.id.new_network)).setOnClickListener(this);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, Util.savedWifiNetworkNames(this));
-//                ArrayAdapter.createFromResource(this, R.array.wifi_points, android.R.layout.simple_list_item_1);
-        _wifiSelector.setAdapter(adapter);
+        bind();
         _wifiSelector.setOnItemClickListener(this);
 
         WifiManager wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
@@ -63,6 +59,11 @@ public class MainScreen extends Activity implements AdapterView.OnItemClickListe
 
     }
 
+    public void bind() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, Util.savedWifiNetworkNames(this));
+        _wifiSelector.setAdapter(adapter);
+    }
+
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         String networkName = (String) adapterView.getItemAtPosition(i);
@@ -79,18 +80,30 @@ public class MainScreen extends Activity implements AdapterView.OnItemClickListe
         WifiInfo connectionInfo;
         if(wifiManager != null && (connectionInfo = wifiManager.getConnectionInfo()) != null){
             final String ssid = connectionInfo.getSSID();
-            Util.confirmation(this,ssid + " network.\nDo you want to add it?",new Runnable() {
+
+            final Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.new_network_dialog);
+            dialog.setTitle(R.string.new_network);
+            ((EditText)dialog.findViewById(R.id.network_name)).setText(ssid);
+            dialog.findViewById(R.id.ok).setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void run() {
-                    Util.createNewNetwork(MainScreen.this,ssid);
-                }
-            },
-            new Runnable() {
-                @Override
-                public void run() {
-                    return;
+                public void onClick(View view) {
+                    EditText networkName = (EditText) dialog.findViewById(R.id.network_name);
+                    Util.createNewNetwork(MainScreen.this,networkName.getText().toString());
+                    MainScreen.this.bind();
+                    dialog.dismiss();
                 }
             });
+
+            dialog.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+
         }
 
 
