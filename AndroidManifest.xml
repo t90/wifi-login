@@ -15,6 +15,7 @@
 
         <activity android:name=".SyncAdapter.LoginActivity" android:excludeFromRecents="true" android:exported="true" />
         <activity android:name=".WifiWebLogin" android:excludeFromRecents="true" android:exported="true" />
+        <activity android:name=".NetworkInfoScreen" android:excludeFromRecents="true" android:exported="true" />
 
         <service android:name=".SyncAdapter.AccountAuthenticatorService" android:exported="true">
             <intent-filter>

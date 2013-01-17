@@ -25,6 +25,11 @@ public class MainScreen extends Activity implements AdapterView.OnItemClickListe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = new Intent(this, NetworkInfoScreen.class);
+        startActivity(intent);
+
+
         setContentView(R.layout.main);
         _wifiSelector = (ListView) findViewById(R.id.wifi_selector);
         ((Button)findViewById(R.id.new_network)).setOnClickListener(this);

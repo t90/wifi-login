@@ -61,7 +61,6 @@ public class WifiWebLogin extends ListActivity implements IPropertiesEventHandle
 
         }
 
-
         Cursor query = getContentResolver().query(ContentProviderImplementation.PROPERTIES_URI, new String[]{"Name", "Value"}, "SSID=?", new String[]{Integer.toString(wifiPointId)}, null);
         _properties = new ArrayList<Pair<String, String>>();
         while(query.moveToNext()){

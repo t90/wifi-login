@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <TabHost
+            android:id="@android:id/tabhost"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            >
+    <TabWidget
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@android:id/tabs"
+            >
+    </TabWidget>
+        <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@android:id/tabcontent"
+                >
+            <!--<FrameLayout-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:id="@+id/tab1"-->
+            <!--/>-->
+            <!--<FrameLayout-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:id="@+id/tab2"-->
+            <!--/>-->
+            <!--<fragment-->
+                    <!--class="t90.com.github.wifilogin.fragments.HtmlViewFragment"-->
+                    <!--android:id="@+id/html_view"-->
+                    <!--android:layout_width="fill_parent"-->
+                    <!--android:layout_height="fill_parent"-->
+                    <!--/>-->
+
+            <!--<fragment-->
+                    <!--class="t90.com.github.wifilogin.fragments.PropertiesViewFragment"-->
+                    <!--android:id="@+id/properties_view"-->
+                    <!--android:layout_width="fill_parent"-->
+                    <!--android:layout_height="fill_parent"-->
+                <!--/>-->
+        </FrameLayout>
+
+
+    </TabHost>
+</LinearLayout>
