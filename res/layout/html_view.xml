@@ -8,5 +8,6 @@
             android:id="@+id/text_input"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            />
+            android:editable="false" android:inputType="text|textMultiLine" android:textIsSelectable="true"
+            android:autoText="true" android:layout_gravity="top"/>
 </LinearLayout>

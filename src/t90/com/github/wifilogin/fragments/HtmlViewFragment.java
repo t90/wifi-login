@@ -13,6 +13,9 @@ import t90.com.github.wifilogin.R;
  * Time: 2:36 PM
  */
 public class HtmlViewFragment extends Fragment {
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.html_view, container, false);
